@@ -1,23 +1,96 @@
-# Teleoperação 2D do Braço Unitree D1-T via Visão Computacional (Método RPC)
+# Related Pairs Control (RPC) — Unitree D1-T 2D Teleoperation
 
-Repositório do laboratório contendo o script de controle por visão computacional e os modelos pré-treinados do Google MediaPipe para a teleoperação 3D do braço robótico antropomórfico **Unitree D1-T** a partir de imagens bidimensionais (webcam RGB monocular).
+<p align="center">
+  <img src="https://raw.githubusercontent.com/MOBILAB-UDESC/Related-Pairs-Control-Unitree-D1T/main/doc/resources/thumb.jpeg" alt="unitree_d1" width="180"/>
+</p>
 
-## 📌 Sobre o Projeto
-Este projeto introduz o método original **Related Pairs Control (RPC)**, que associa pares específicos de pontos-chave do corpo humano a atuadores robóticos individuais, permitindo controle espacial em tempo real sem câmeras de profundidade. A arquitetura de visão é dividida em:
-* **Pose Landmarker (Heavy):** Detecção robusta dos pontos do ombro e cotovelo para movimentação espacial do braço.
-* **Hand Landmarker:** Detecção de alta precisão dos pontos do pulso e da mão para controle dedicado da garra (abertura, fechamento e rotação).
+## Description
+A real-time, low-cost 3D teleoperation framework for the **Unitree Robotics D1-T** (6-DOF anthropomorphic manipulator) using only a conventional 2D RGB webcam. 
 
-## 📂 Estrutura do Repositório
-* `control_d1t.py`: Nó principal em Python integrando OpenCV, inferência do MediaPipe e comunicação com o ecossistema ROS 2.
-* `landmarks/`: Pasta contendo os modelos `.task` do Google MediaPipe (`hand_landmarker.task` e `pose_landmarker_heavy.task`).
+This project introduces the **Related Pairs Control (RPC)** method, which associates specific pairs of human body keypoints with individual robotic actuators. By combining Google MediaPipe's **Pose Landmarker** and **Hand Landmarker**, the system eliminates the need for expensive depth sensors while maintaining precise control over both the arm and gripper.
 
-## 🚀 Pré-requisitos e Execução
-* Ubuntu (22.04 / 24.04) com **ROS 2** (Humble / Jazzy)
-* Python 3, OpenCV e Google MediaPipe
+**Note:** This package is built on top of the [MOBILAB-UDESC arms](https://github.com/MOBILAB-UDESC/arms.git) ROS 2 meta-package.
 
-Para iniciar o nó de controle de visão no seu workspace:
-    python3 control_d1t.py
+## ROS 2 Info
+| Ubuntu | ROS 2 Distro | Gazebo Version | Python Dependencies |
+| :---: | :---: | :---: | :---: |
+| [24.04](https://ubuntu.com/blog/tag/ubuntu-24-04-lts) | [Jazzy](https://docs.ros.org/en/jazzy/index.html) | [Harmonic](https://gazebosim.org/docs/harmonic/getstarted/) | `opencv-python`, `mediapipe` |
 
-## 📄 Referência e Citação
-Trabalho aceito para apresentação e publicação nos anais do **XXVI Congresso Brasileiro de Automática (CBA 2026)**, São Paulo, SP.  
-*Título:* "Related Pairs Control (RPC): A 3D Position Controller for an Anthropomorphic Arm Using Two-Dimensional Images"
+---
+
+## Cloning and Building
+
+```cli
+mkdir -p ~/arms_ws/src && cd ~/arms_ws/src
+git clone [https://github.com/MOBILAB-UDESC/arms.git](https://github.com/MOBILAB-UDESC/arms.git) .
+git submodule update --init unitree_d1 d1_2f
+
+# Clone the RPC Vision Teleoperation package
+git clone [https://github.com/rngllz/Related-Pairs-Control-D1T.git](https://github.com/rngllz/Related-Pairs-Control-D1T.git)
+
+cd ..
+rosdep install --from-paths src --ignore-src -r -y
+pip install mediapipe opencv-python
+colcon build
+source install/setup.bash
+```
+
+---
+
+## Quick Start Tutorial
+
+### 1. Launch the Robot
+You can run the teleoperation system using either the Gazebo simulation or the real hardware.
+
+**Option A: Gazebo Simulation**
+```cli
+ros2 launch arms_bringup arm_gazebo_launch.py use_sim_time:=true arm:=unitree_d1 gripper:=d1_2f
+```
+
+**Option B: Real Hardware (Physical D1-T)**
+```cli
+ros2 launch arms_bringup arm_bringup.launch.py arm_profile:=unitree_d1_2f use_sim_time:=false
+```
+
+### 2. Run the Vision Controller
+Open a new terminal tab, source the workspace, and start the MediaPipe vision node:
+```cli
+cd ~/arms_ws
+source install/setup.bash
+python3 src/Related-Pairs-Control-D1T/control_d1t.py
+```
+
+---
+
+## Keyboard Controls
+The system relies on a keyboard interface for real-time mode switching and safety:
+
+| Key | Action | Function |
+| :---: | :---: | :--- |
+| **`t`** | **Activate** | Starts user range-of-motion calibration |
+| **`u`** | **Deactivate** | Saves calibration limits and normalizes workspace |
+| **`e`** | **Toggle Mode** | Switches between **Arm Mode** (3D spatial) and **Gripper Mode** (hand gestures) |
+| **`o`** | **Toggle ROS 2** | Enables or disables sending commands to the robot (**ON / OFF**) |
+
+---
+
+## How It Works
+* **Arm Mode:** Tracks the user's right shoulder and elbow via *Pose Landmarker*, combined with the wrist and middle finger from *Hand Landmarker*, mapping 2D planar movements to 3D joint angles using anatomical visual pairings.
+* **Gripper Mode:** Uses high-precision hand tracking to control gripper opening/closing (thumb-to-index distance) and wrist rotation (palm tilt triangulation).
+* **Safety First:** Data is only published to `/joint_trajectory` or `/gripper_cmd` when ROS 2 transmission is toggled **ON** via the `o` key.
+
+---
+
+## Demonstrations
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/rngllz/Related-Pairs-Control-D1T/main/doc/resources/webcam_screenshot.png" alt="MediaPipe Tracking" width="400"/>
+  <img src="https://raw.githubusercontent.com/rngllz/Related-Pairs-Control-D1T/main/doc/resources/gazebo_screenshot.png" alt="Gazebo Simulation" width="400"/>
+</p>
+
+---
+
+## Reference and Citation
+Accepted for presentation and publication in the Proceedings of the **XXVI Brazilian Congress of Automatica (CBA 2026)**, São Paulo, Brazil.
+
+> **Title:** "Related Pairs Control (RPC): A 3D Position Controller for an Anthropomorphic Arm Using Two-Dimensional Images"
