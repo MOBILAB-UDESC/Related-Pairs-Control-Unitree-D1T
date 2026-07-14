@@ -1,7 +1,7 @@
 # Related Pairs Control (RPC) — Unitree D1-T 2D Teleoperation
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/MOBILAB-UDESC/Related-Pairs-Control-Unitree-D1T/main/doc/resources/thumb.jpeg" alt="unitree_d1" width="180"/>
+  <img src="https://raw.githubusercontent.com/MOBILAB-UDESC/Related-Pairs-Control-Unitree-D1T/main/doc/resources/thumb.jpeg" alt="unitree_d1" width="1800"/>
 </p>
 
 ## Description
@@ -84,11 +84,21 @@ The system relies on a keyboard interface for real-time mode switching and safet
 ## Demonstrations
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/rngllz/Related-Pairs-Control-D1T/main/doc/resources/webcam_screenshot.png" alt="MediaPipe Tracking" width="400"/>
-  <img src="https://raw.githubusercontent.com/rngllz/Related-Pairs-Control-D1T/main/doc/resources/gazebo_screenshot.png" alt="Gazebo Simulation" width="400"/>
+  <img src="https://raw.githubusercontent.com/MOBILAB-UDESC/Related-Pairs-Control-Unitree-D1T/main/doc/resources/arm.png" alt="MediaPipe Tracking" width="400"/>
+  <img src="https://raw.githubusercontent.com/MOBILAB-UDESC/Related-Pairs-Control-Unitree-D1T/main/doc/resources/gripper.png"alt="Gazebo Simulation" width="400"/>
 </p>
 
 ---
+
+## Video Demonstration
+
+A full demonstration of the **Related Pairs Control (RPC)** system in action—showing real-time 3D camera tracking synchronizing with the Unitree D1-T—is available on YouTube.
+
+[![Watch the video on YouTube](https://img.shields.io/badge/YouTube-Watch%20Video-red?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=5eqauxCYT18)
+
+---
+
+
 
 ## Reference and Citation
 Accepted for presentation and publication in the Proceedings of the **XXVI Brazilian Congress of Automatica (CBA 2026)**, São Paulo, Brazil.
