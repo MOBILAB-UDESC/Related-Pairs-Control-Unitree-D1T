@@ -5,7 +5,7 @@
 </p>
 
 ## Description
-A real-time, low-cost 3D teleoperation framework for the **Unitree Robotics D1-T** (6-DOF anthropomorphic manipulator) using only a conventional 2D RGB webcam. 
+A real-time 3D teleoperation framework for the **Unitree Robotics D1-T** (6-DOF anthropomorphic manipulator) using only a conventional 2D RGB webcam. 
 
 This project introduces the **Related Pairs Control (RPC)** method, which associates specific pairs of human body keypoints with individual robotic actuators. By combining Google MediaPipe's **Pose Landmarker** and **Hand Landmarker**, the system eliminates the need for expensive depth sensors while maintaining precise control over both the arm and gripper.
 
